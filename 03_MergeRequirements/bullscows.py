@@ -2,6 +2,7 @@ from collections import Counter
 import random
 import argparse
 import urllib.request
+from cowsay import cowsay, get_random_cow
 
 def bullscows(guess: str, secret: str) -> tuple[int, int]:
 
@@ -17,7 +18,10 @@ def bullscows(guess: str, secret: str) -> tuple[int, int]:
 
 
 def ask(prompt: str, valid: list[str] = None) -> str:
-	guess = input(prompt)
+	cow = get_random_cow()
+
+	print(cowsay(prompt, cow=cow))
+	guess = input()
 
 	if valid is not None:
 		while guess not in valid:
@@ -25,15 +29,17 @@ def ask(prompt: str, valid: list[str] = None) -> str:
 			if ":(" in guess:
 				raise TypeError("Он не знает :(")
 				
-			
-			print("Такого слова нет :(")
-			guess = input(prompt)
+			print(cowsay("Такого слова нет :(", cow=cow))
+			print(cowsay(prompt, cow=cow))
+			guess = input()
 
 	return guess
 
 
 def inform(format_string: str, bulls: int, cows: int) -> None:
-	print(eval(f"format_string.format(bulls, cows)"))
+	cow = get_random_cow()
+	text = eval(f"format_string.format(bulls, cows)")
+	print(cowsay(text, cow=cow))
 
 
 def gameplay(ask: callable, inform: callable, words: list[str]) -> int:
