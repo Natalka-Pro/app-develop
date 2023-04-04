@@ -21,22 +21,13 @@ register_cow = {}   # {name_of_cow : me}
 
 async def chat(reader, writer):
     me = "{}:{}".format(*writer.get_extra_info('peername'))
-    # print(f"@1")
     print(f"{me} connected")
-    # очередь для каждого клиента
     clients[me] = asyncio.Queue()
-    # почитать из входного потока
-    # print(f"@2 {len(clients)}")
     send = asyncio.create_task(reader.readline()) 
-    # посмотреть ненаписали ли нам сообщение, чтение из очереди
     receive = asyncio.create_task(clients[me].get())
-    # print(f"@1 {me}")
     while not reader.at_eof():
-        # либо получаем, либо отправляем, какая первая придёт
-        # print(f"@2 {me}")
         done, pending = await asyncio.wait([send, receive], return_when=asyncio.FIRST_COMPLETED)
-        # print(f"@3 {me}")
-
+        
         for q in done:
             if q is send:
                 # print(f"send {me}")
@@ -70,8 +61,8 @@ async def chat(reader, writer):
                     elif len(comm) == 1:
                         await clients[me].put(">>> Enter the cow's name please!")
                     elif comm[1] not in valid_names:
-                        await clients[me].put(">>> This name is not suitable :(\n" +
-                                ">>> Look at the list of free cow names using the command 'cows'")
+                        await clients[me].put(f">>> Name '{comm[1]}' is not suitable :(\n"
+                                + ">>> Look at the list of free cow names using the command 'cows'")
                     else:
                         register_cow[comm[1]] = me
                         await clients[me].put(f">>> You have registered under the name '{comm[1]}'")

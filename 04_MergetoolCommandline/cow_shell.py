@@ -147,7 +147,7 @@ class cmdline(cmd.Cmd):
         """
         compl = "cowsay", "cowthink"
         line = shlex.split(line)
-        print(f"\n{pfx=}, {line=}, {beg=}, {end=}\n")
+        # print(f"\n{pfx=}, {line=}, {beg=}, {end=}\n")
         if (len(line) == 2 and pfx == "") or (len(line) == 3 and pfx != ""):
             # либо ввели пробел и не написали cowsay или cowthink
             # либо ввели часть cowsay или cowthink и не нажали пробел
